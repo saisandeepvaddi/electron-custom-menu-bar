@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
+    
     <title>Hello World!</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://kit.fontawesome.com/1c9144b004.js" crossorigin="anonymous"></script>
+    </head>
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+    <div id="menu-bar">
+      <div class="left" role="menu">
+        <button class="menubar-btn" id="menu-btn" aria-label="Open Menu"><i class="fas fa-bars"></i></button>
+      </div>
+      <div class="right">
+        <button class="menubar-btn" id="minimize-btn" aria-label="Minimize Window"><i class="fas fa-window-minimize"></i></button>
+        <button class="menubar-btn" id="max-unmax-btn" aria-label="Maximize-Unmaximize button"><i class="far fa-square"></i></button>
+        <button class="menubar-btn" id="close-btn" aria-label="Close Button"><i class="fas fa-times"></i></button>
+      </div>
+    </div>
+    <div class="container">
+      Hello there!
+    </div>
 
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
