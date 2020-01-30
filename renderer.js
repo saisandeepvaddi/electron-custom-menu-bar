@@ -5,6 +5,13 @@
 // selectively enable features needed in the rendering
 // process.
 
+// A little helper tool to wrap your functions if you want to build same app on web and electron.
+// Use this function to use electron apis only when running inside electron.
+// const isRunningInElectron = () => {
+//   const userAgent = navigator.userAgent.toLowerCase();
+//   return userAgent.indexOf(" electron/") > -1;
+// };
+
 window.addEventListener("DOMContentLoaded", () => {
   const menuButton = document.getElementById("menu-btn");
   const minimizeButton = document.getElementById("minimize-btn");

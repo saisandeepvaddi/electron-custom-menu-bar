@@ -8,7 +8,8 @@ const {
   maximizeWindow,
   unmaximizeWindow,
   maxUnmaxWindow,
-  isWindowMaximized
+  isWindowMaximized,
+  closeWindow
 } = require("./menu-functions");
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -19,4 +20,5 @@ window.addEventListener("DOMContentLoaded", () => {
   window.unmaximizeWindow = unmaximizeWindow;
   window.maxUnmaxWindow = maxUnmaxWindow;
   window.isWindowMaximized = isWindowMaximized;
+  window.closeWindow = closeWindow;
 });

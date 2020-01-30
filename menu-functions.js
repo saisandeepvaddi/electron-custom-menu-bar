@@ -9,13 +9,15 @@ function openMenu(x, y) {
 }
 
 function minimizeWindow(window = getCurrentWindow()) {
-  if (window.isMinimizable()) {
+  if (window.minimizable) {
+    // window.isMinimizable() for old electron versions
     window.minimize();
   }
 }
 
 function maximizeWindow(window = getCurrentWindow()) {
-  if (window.isMaximizable()) {
+  if (window.maximizable) {
+    // window.isMaximizable() for old electron versions
     window.maximize();
   }
 }
@@ -32,7 +34,7 @@ function maxUnmaxWindow(window = getCurrentWindow()) {
   }
 }
 
-function close(window = getCurrentWindow()) {
+function closeWindow(window = getCurrentWindow()) {
   window.close();
 }
 
@@ -47,5 +49,6 @@ module.exports = {
   maximizeWindow,
   unmaximizeWindow,
   maxUnmaxWindow,
-  isWindowMaximized
+  isWindowMaximized,
+  closeWindow
 };

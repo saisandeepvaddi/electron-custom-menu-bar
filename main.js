@@ -1,61 +1,44 @@
-// Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const { menu } = require("./menu");
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
 const isWindows = process.platform === "win32";
 
 function createWindow() {
-  // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js")
+      // (NOT RECOMMENDED)
+      // If true, we can skip attaching functions from ./menu-functions.js to window object in preload.js.
+      // And, instead, we can use electron APIs directly in renderer.js
+      // From Electron v5, nodeIntegration is set to false by default. And it is recommended to use preload.js to get access to only required Node.js apis.
+      // nodeIntegration: true
     },
-    frame: isWindows ? false : true
+    frame: isWindows ? false : true //Remove frame to hide default menu
   });
 
-  // and load the index.html of the app.
   mainWindow.loadFile("index.html");
 
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-
-  // Emitted when the window is closed.
   mainWindow.on("closed", function() {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
     mainWindow = null;
   });
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on("ready", createWindow);
 
-// Quit when all windows are closed.
 app.on("window-all-closed", function() {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== "darwin") app.quit();
 });
 
 app.on("activate", function() {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
+// Register an event listener. When ipcRenderer sends mouse click co-ordinates, show menu at that point.
 ipcMain.on(`display-app-menu`, function(e, args) {
   if (isWindows && mainWindow) {
     menu.popup({
