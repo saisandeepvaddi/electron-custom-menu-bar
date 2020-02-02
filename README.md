@@ -46,7 +46,7 @@ $ npm install && npm start
 
 When you first run `npm start` you will see a window with a default menu bar attached to it. To replace it with our menu bar, we need to do two things. In the `main.js` file we have,
 
-1. Set the `frame: false` in the `options` object for `new BrowserWindow({frame: false, ...other-options})`. This will create a window without toolbars, borders, etc., Check [frameless-window](https://https://www.electronjs.org/docs/api/frameless-window) for more details.
+1. Set the `frame: false` in the `options` object for `new BrowserWindow({frame: false, ...other-options})`. This will create a window without toolbars, borders, etc., Check [frameless-window](https://www.electronjs.org/docs/api/frameless-window) for more details.
 2. Register an event listener on `ipcMain` which receives a mouse click position when the mouse is clicked on the hamburger icon.
 
 ```js
@@ -68,7 +68,7 @@ When you first run `npm start` you will see a window with a default menu bar att
   // ...other stuff
 }
 
-// Register an event listener. When ipcRenderer sends mouse click co-ordinates, show menu at that point.
+// Register an event listener. When ipcRenderer sends mouse click co-ordinates, show menu at that position.
 ipcMain.on(`display-app-menu`, function(e, args) {
   if (isWindows && mainWindow) {
     menu.popup({
@@ -82,9 +82,7 @@ ipcMain.on(`display-app-menu`, function(e, args) {
 // ... other stuff.
 ```
 
-If you see above where `nodeIntegration: true` is commented out, electron new versions have it false set by default for security reasons. So we need to export some functions to the `window` object in `preload.js` which we will use in the renderer process to control `mainWindow`.
-
-If you just read the code, you'll see these functions take in an electron's `BrowserWindow` object (`mainWindow`) and run minimize, maximize, close, open menu actions which we need to trigger from our custom UI.
+Create a file called `menu-functions.js` and define these functions. All the functions here take electron's `BrowserWindow` object (`mainWindow` in this app) and run minimize, maximize, close, open menu actions which we need to trigger from our custom menu bar.
 
 ```js
 // menu-functions.js
@@ -98,31 +96,38 @@ function openMenu(x, y) {
   ipcRenderer.send(`display-app-menu`, { x, y });
 }
 
-function minimizeWindow(window = getCurrentWindow()) {
-  if (window.minimizable) {
-    // window.isMinimizable() for old electron versions
-    window.minimize();
+function minimizeWindow(browserWindow = getCurrentWindow()) {
+  if (browserWindow.minimizable) {
+    // browserWindow.isMinimizable() for old electron versions
+    browserWindow.minimize();
   }
 }
 
-function unmaximizeWindow(window = getCurrentWindow()) {
-  window.unmaximize();
+function maximizeWindow(browserWindow = getCurrentWindow()) {
+  if (browserWindow.maximizable) {
+    // browserWindow.isMaximizable() for old electron versions
+    browserWindow.maximize();
+  }
 }
 
-function maxUnmaxWindow(window = getCurrentWindow()) {
-  if (window.isMaximized()) {
-    window.unmaximize();
+function unmaximizeWindow(browserWindow = getCurrentWindow()) {
+  browserWindow.unmaximize();
+}
+
+function maxUnmaxWindow(browserWindow = getCurrentWindow()) {
+  if (browserWindow.isMaximized()) {
+    browserWindow.unmaximize();
   } else {
-    window.maximize();
+    browserWindow.maximize();
   }
 }
 
-function closeWindow(window = getCurrentWindow()) {
-  window.close();
+function closeWindow(browserWindow = getCurrentWindow()) {
+  browserWindow.close();
 }
 
-function isWindowMaximized(window = getCurrentWindow()) {
-  return window.isMaximized();
+function isWindowMaximized(browserWindow = getCurrentWindow()) {
+  return browserWindow.isMaximized();
 }
 
 module.exports = {
@@ -137,11 +142,10 @@ module.exports = {
 };
 ```
 
-We need to attach these functions to a window object which we can use in the renderer process. If you are using older versions of electron or you set `nodeIntegration: true` in `BrowserWindow` options, you can use the above `menu-functions.js` file directly in the renderer process.
+We need to attach these functions to the `window` which we can use in the renderer process. If you are using older versions (<5.0.0) of electron or you set `nodeIntegration: true` in `BrowserWindow`'s options, you can use the above `menu-functions.js` file directly in the renderer process. Electron new versions have it `false` set by default for [security reasons](https://www.electronjs.org/docs/tutorial/security#2-do-not-enable-nodejs-integration-for-remote-content). So we need to add these functions to the `window` object in `preload.js` which we will use in the renderer process to control `mainWindow`.
 
 ```js
-// All of the Node.js APIs are available in the preload process.
-// It has the same sandbox as a Chrome extension.
+// preload.js
 const { remote } = require("electron");
 const {
   getCurrentWindow,
@@ -164,8 +168,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 ```
 
-We need to have a menu now. You can learn how to add your own options to the menu at [official docs](https://www.electronjs.org/docs/api/menu). Electron has some easy to follow documentation with examples.
-For our current purpose, let's use the following menu. Paste this in your `menu.js` file.
+We need a menu now. Create a simple menu in a new `menu.js` file. You can learn how to add your own options to the menu at [official docs](https://www.electronjs.org/docs/api/menu). Electron has some easy to follow documentation with examples.
 
 ```js
 // menu.js
@@ -189,12 +192,12 @@ module.exports = {
 };
 ```
 
-We are done on the main process side. Now, let's build our custom menu UI. If you see the menu in the image, you'll see we have these things on our menu.
+We are done on the main process side. Now, let's build our custom menu bar. If you see the menu in the image, you'll see that we have these things on our menu bar.
 
 1. On the left side, a hamburger icon which is where the menu will open.
 2. On the right side, we have minimize button, maximize-unmaximize button, and close button.
 
-For icons for these buttons, I used fontawesome js file. Go ahead and get from [fontawesome.com](https://fontawesome.com/). It will give you a JS file. Add it to HTML's `<head>` tag. I removed `Content-Security-Policy` meta tags to allow fontawesome js file to run for now. In production, make sure you properly allow which code should run. Check [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) for more details.
+I used fontawesome js file from [fontawesome.com](https://fontawesome.com/) for icons. Add it to HTML's `<head>` tag. I removed `Content-Security-Policy` meta tags to allow fontawesome js file to run for now. In production, make sure you properly allow which code should run. Check [CSP](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP) for more details.
 
 ```html
 <!-- index.html -->
@@ -292,14 +295,13 @@ button i {
 }
 ```
 
-Now your window should look like this. Awesome.
+Now your window should look like this. Awesome. We are almost there.
 
 <p align="center">
   <img alt="Result image before clicking on menu" src="./result_image.jpg" width="500" />
 </p>
 
-If you guessed it, none of the buttons in the menu toolbar work. Because we didn't add `onclick` listeners for them. Let's do that. Remember that we attached some functions to the `window` object in `preload.js`.
-We'll use them in click listeners for these buttons.
+If you guessed it, none of the buttons in the menu bar work. Because we didn't add `onclick` event listeners for them. Let's do that. Remember we attached some electron api utility functions to the `window` object in `preload.js`? We'll use them in click listeners.
 
 ```js
 // renderer.js
@@ -340,12 +342,10 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 ```
 
-Again, if you used `nodeIntegration: true` or old electron versions, you can directly import `menu-functions.js` here.
-
 That is all. Restart your app with `npm run start` and your new menu bar buttons should work.
 
-Some parts of code are removed in the above scripts for brevity, you can get the full code at [https://github.com/saisandeepvaddi/electron-custom-menu-bar](https://github.com/saisandeepvaddi/electron-custom-menu-bar).
+**NOTE:** Some parts of code are removed in the above scripts for brevity. You can get the full code at [https://github.com/saisandeepvaddi/electron-custom-menu-bar](https://github.com/saisandeepvaddi/electron-custom-menu-bar).
 
-Additionally, If you want to see a bigger electron app with a lot more stuff, check the [https://github.com/saisandeepvaddi/ten-hands](https://github.com/saisandeepvaddi/ten-hands) app which uses the similar style menu bar (custom style menu is visible only on Window for now though) built with React and TypeScript. I wrote this tutorial after using this menu bar there. Give the app a try. I'm also looking for contributors in that project just in case you are interested in contributing to React/TS/Node/Electron open-source projects.
+If you want to see a bigger electron app with a lot more stuff, check the [https://github.com/saisandeepvaddi/ten-hands](https://github.com/saisandeepvaddi/ten-hands) app which uses the similar style menu bar (custom style menu is visible only on Window for now though) but built with React and TypeScript. I wrote this tutorial after using this menu bar there. Give the app a try. I'm also looking for contributors in that project just in case you are interested in contributing to React/TS/Node/Electron open-source projects.
 
 Thank you. 🙏
