@@ -1,4 +1,4 @@
-# Creating custom menu bar in Electron
+# Creating a custom menu bar in Electron
 
 Do you want to replace your electron app's menu bar to look something cool? Let's see how to build a custom menu bar by building a similar one to slack's menu bar.
 
