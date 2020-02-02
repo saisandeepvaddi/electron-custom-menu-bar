@@ -8,38 +8,38 @@ function openMenu(x, y) {
   ipcRenderer.send(`display-app-menu`, { x, y });
 }
 
-function minimizeWindow(window = getCurrentWindow()) {
-  if (window.minimizable) {
-    // window.isMinimizable() for old electron versions
-    window.minimize();
+function minimizeWindow(browserWindow = getCurrentWindow()) {
+  if (browserWindow.minimizable) {
+    // browserWindow.isMinimizable() for old electron versions
+    browserWindow.minimize();
   }
 }
 
-function maximizeWindow(window = getCurrentWindow()) {
-  if (window.maximizable) {
-    // window.isMaximizable() for old electron versions
-    window.maximize();
+function maximizeWindow(browserWindow = getCurrentWindow()) {
+  if (browserWindow.maximizable) {
+    // browserWindow.isMaximizable() for old electron versions
+    browserWindow.maximize();
   }
 }
 
-function unmaximizeWindow(window = getCurrentWindow()) {
-  window.unmaximize();
+function unmaximizeWindow(browserWindow = getCurrentWindow()) {
+  browserWindow.unmaximize();
 }
 
-function maxUnmaxWindow(window = getCurrentWindow()) {
-  if (window.isMaximized()) {
-    window.unmaximize();
+function maxUnmaxWindow(browserWindow = getCurrentWindow()) {
+  if (browserWindow.isMaximized()) {
+    browserWindow.unmaximize();
   } else {
-    window.maximize();
+    browserWindow.maximize();
   }
 }
 
-function closeWindow(window = getCurrentWindow()) {
-  window.close();
+function closeWindow(browserWindow = getCurrentWindow()) {
+  browserWindow.close();
 }
 
-function isWindowMaximized(window = getCurrentWindow()) {
-  return window.isMaximized();
+function isWindowMaximized(browserWindow = getCurrentWindow()) {
+  return browserWindow.isMaximized();
 }
 
 module.exports = {
