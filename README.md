@@ -142,7 +142,7 @@ module.exports = {
 };
 ```
 
-We need to attach these functions to the `window` which we can use in the renderer process. If you are using older versions (<5.0.0) of electron or you set `nodeIntegration: true` in `BrowserWindow`'s options, you can use the above `menu-functions.js` file directly in the renderer process. Electron new versions have it `false` set by default for [security reasons](https://www.electronjs.org/docs/tutorial/security#2-do-not-enable-nodejs-integration-for-remote-content). So we need to add these functions to the `window` object in `preload.js` which we will use in the renderer process to control `mainWindow`.
+We need to attach these functions to the `window` object which we can use in the renderer process. If you are using older versions (<5.0.0) of electron or you set `nodeIntegration: true` in `BrowserWindow`'s options, you can use the above `menu-functions.js` file directly in the renderer process. Electron new versions have it `false` set by default for [security reasons](https://www.electronjs.org/docs/tutorial/security#2-do-not-enable-nodejs-integration-for-remote-content).
 
 ```js
 // preload.js
