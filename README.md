@@ -1,6 +1,6 @@
-# Creating custom menubar in Electron
+# Creating custom menu bar in Electron
 
-You are building an electron app and want to replace that default menu bar with something cool. Let's see how to build a custom menu bar by building a similar one to slack's menubar.
+You are building an electron app and want to replace that default menu bar with something cool. Let's see how to build a custom menu bar by building a similar one to slack's menu bar.
 
 ## Pre-requisite
 
@@ -342,10 +342,10 @@ window.addEventListener("DOMContentLoaded", () => {
 
 Again, if you used `nodeIntegration: true` or old electron versions, you can directly import `menu-functions.js` here.
 
-That is all. Restart your app with `npm run start` and your new menubar buttons should work.
+That is all. Restart your app with `npm run start` and your new menu bar buttons should work.
 
 Some parts of code are removed in the above scripts for brevity, you can get the full code at [https://github.com/saisandeepvaddi/electron-custom-menu-bar](https://github.com/saisandeepvaddi/electron-custom-menu-bar).
 
-Additionally, If you want to see a bigger electron app with a lot more stuff, check the [https://github.com/saisandeepvaddi/ten-hands](https://github.com/saisandeepvaddi/ten-hands) app which uses the similar style menubar (custom style menu is visible only on Window for now though) built with React and TypeScript. I wrote this tutorial after using this menubar there. Give the app a try. I'm also looking for contributors in that project just in case you are interested in contributing to React/TS/Node/Electron open-source projects.
+Additionally, If you want to see a bigger electron app with a lot more stuff, check the [https://github.com/saisandeepvaddi/ten-hands](https://github.com/saisandeepvaddi/ten-hands) app which uses the similar style menu bar (custom style menu is visible only on Window for now though) built with React and TypeScript. I wrote this tutorial after using this menu bar there. Give the app a try. I'm also looking for contributors in that project just in case you are interested in contributing to React/TS/Node/Electron open-source projects.
 
 Thank you. 🙏
