@@ -44,7 +44,7 @@ $ npm install && npm start
 
 ## Main process code
 
-When you first run `npm start` you will see a window with a menu attached to it. To show our menu on the hamburger icon, we need to do two things.
+When you first run `npm start` you will see a window with a default menu bar attached to it. To replace it with our menu bar, we need to do two things. In the `main.js` file we have,
 
 1. Set the `frame: false` in the `options` object for `new BrowserWindow({frame: false, ...other-options})`. This will create a window without toolbars, borders, etc., Check [frameless-window](https://https://www.electronjs.org/docs/api/frameless-window) for more details.
 2. Register an event listener on `ipcMain` which receives a mouse click position when the mouse is clicked on the hamburger icon.
