@@ -301,7 +301,7 @@ Now your window should look like this. Awesome. We are almost there.
   <img alt="Result image before clicking on menu" src="./result_image.jpg" width="500" />
 </p>
 
-If you guessed it, none of the buttons in the menu bar work. Because we didn't add `onclick` event listeners for them. Let's do that. Remember we attached some electron api utility functions to the `window` object in `preload.js`? We'll use them in click listeners.
+If you guessed it, none of the buttons in the menu bar work. Because we didn't add `onclick` event listeners for them. Let's do that. Remember we attached some utility functions to the `window` object in `preload.js`? We'll use them in button click listeners.
 
 ```js
 // renderer.js
@@ -342,7 +342,7 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 ```
 
-That is all. Restart your app with `npm run start` and your new menu bar buttons should work.
+That's it. Restart your app with `npm run start` and your new menu bar buttons should work.
 
 **NOTE:** Some parts of code are removed in the above scripts for brevity. You can get the full code at [https://github.com/saisandeepvaddi/electron-custom-menu-bar](https://github.com/saisandeepvaddi/electron-custom-menu-bar).
 
