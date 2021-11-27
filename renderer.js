@@ -19,6 +19,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const closeButton = document.getElementById("close-btn");
 
   menuButton.addEventListener("click", e => {
+    // Opens menu at (x,y) coordinates of mouse click on the hamburger icon.
     window.openMenu(e.x, e.y);
   });
 
@@ -27,17 +28,9 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   maxUnmaxButton.addEventListener("click", e => {
-    const icon = maxUnmaxButton.querySelector("i.far");
-
     window.maxUnmaxWindow();
-    if (window.isWindowMaximized()) {
-      icon.classList.remove("fa-square");
-      icon.classList.add("fa-clone");
-    } else {
-      icon.classList.add("fa-square");
-      icon.classList.remove("fa-clone");
-    }
   });
+
   closeButton.addEventListener("click", e => {
     window.closeWindow();
   });

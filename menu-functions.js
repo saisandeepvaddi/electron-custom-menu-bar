@@ -1,54 +1,37 @@
-const { remote, ipcRenderer } = require("electron");
+const { ipcRenderer } = require("electron");
 
-function getCurrentWindow() {
-  return remote.getCurrentWindow();
-}
 
 function openMenu(x, y) {
   ipcRenderer.send(`display-app-menu`, { x, y });
 }
 
-function minimizeWindow(browserWindow = getCurrentWindow()) {
-  if (browserWindow.minimizable) {
-    // browserWindow.isMinimizable() for old electron versions
-    browserWindow.minimize();
-  }
+function minimizeWindow() {
+  ipcRenderer.send(`minimize-window`);
 }
 
-function maximizeWindow(browserWindow = getCurrentWindow()) {
-  if (browserWindow.maximizable) {
-    // browserWindow.isMaximizable() for old electron versions
-    browserWindow.maximize();
-  }
+function maximizeWindow() {
+  ipcRenderer.send(`maximize-window`);
 }
 
-function unmaximizeWindow(browserWindow = getCurrentWindow()) {
-  browserWindow.unmaximize();
+function unmaximizeWindow() {
+  ipcRenderer.send(`unmaximize-window`);
 }
 
-function maxUnmaxWindow(browserWindow = getCurrentWindow()) {
-  if (browserWindow.isMaximized()) {
-    browserWindow.unmaximize();
-  } else {
-    browserWindow.maximize();
-  }
+function maxUnmaxWindow() {
+  ipcRenderer.send(`max-unmax-window`);
 }
 
-function closeWindow(browserWindow = getCurrentWindow()) {
-  browserWindow.close();
+function closeWindow() {
+  ipcRenderer.send(`close-window`);
 }
 
-function isWindowMaximized(browserWindow = getCurrentWindow()) {
-  return browserWindow.isMaximized();
-}
 
 module.exports = {
-  getCurrentWindow,
   openMenu,
   minimizeWindow,
   maximizeWindow,
   unmaximizeWindow,
   maxUnmaxWindow,
-  isWindowMaximized,
-  closeWindow
+  closeWindow,
 };
+
